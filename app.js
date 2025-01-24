@@ -1,69 +1,60 @@
-//display property
-//onclick event
-//eval() function
-//assignment operator
-//
+// Get references to the form and display input
+const form = document.getElementById('myform');
+const display = form.display;
 
+// Function to clear the display
+function clearDisplay() {
+    display.value = '';
+}
 
+// Function to append a value to the display
+function appendValue(value) {
+    display.value += value;
+}
 
-//The below code sucks! But, at least I tried...for like 3 hours. Please don't use. lol
+// Function to validate the expression
+function isValidExpression(expression) {
+    const validPattern = /^[0-9+\-*/.()]+$/; // Only allow numbers, operators, and parentheses
+    return validPattern.test(expression);
+}
 
+// Function to calculate the result
+function calculateResult() {
+    if (!isValidExpression(display.value)) {
+        alert('Invalid Expression');
+        clearDisplay();
+        return;
+    }
+    if (display.value.includes('/0')) {
+        alert('Error: Division by zero');
+        clearDisplay();
+        return;
+    }
+    try {
+        // Safely evaluate the expression
+        display.value = eval(display.value);
+    } catch (error) {
+        alert('Error in Calculation');
+        clearDisplay();
+    }
+}
 
-// const buttons = document.querySelectorAll('button');
-// let primaryOperand = '';
-// let secondaryOperand = '';
-// let operand = '';
-// let operand2 = '';
-// let savedOperator = '';
-// let results = '';
-// let operator = '';
+// Attach event listeners to buttons
+document.querySelectorAll('input[type="button"]').forEach(button => {
+    button.addEventListener('click', (event) => {
+        const value = event.target.value;
 
-// getPrimaryOperand();
-// console.log(results);
-// function calculateNumber(primaryOperand, operator, secondaryOperand){
-//      results = eval(primaryOperand + operator + secondaryOperand);
-//      return results;
-// }
-
-// function saveOperator(operator){
-//     savedOperator = operator;
-//     return savedOperator;
-// }
-
-// function getPrimaryOperand(){
-//     buttons.forEach(function(button){
-//         button.addEventListener('click', function(e){
-
-//         operand = e.target.textContent
-            
-//          if (operand !== "0" && operand !== "+" && operand !== "-" && operand !== "X" && operand !== "÷" && operand !== "=" && operand !== "C"){
-//                 primaryOperand += e.target.textContent;
-//                 console.log(primaryOperand);
-//             } else if (operand === "+" || operand === "-" || operand === "X" || operand === "÷" || operand === "=" || operand !== "C"){
-//                 operator = operand;
-//                 getSecondaryOperand(operator);
-//             }
-//         })
-//     })   
-// }
-
-// function getSecondaryOperand(operator){
-//     buttons.forEach(function(button){
-//         button.addEventListener('click', function(e){
-
-//         operand2 = e.target.textContent
-            
-//          if (operand2 !== "0" && operand2 !== "+" && operand2 !== "-" && operand2 !== "X" && operand2 !== "÷" && operand2 !== "=" && operand2 !== "C"){
-//                 secondaryOperand += e.target.textContent;
-//                 console.log(secondaryOperand);
-//             } else if (operand === "="){
-                
-//                 calculateNumber(primaryOperand, operator, secondaryOperand);
-//             }
-//         })
-//     })   
-// }
-
-
-// false OR true returns true;
-// true is returned if any condition within an OR statement is true
+        // Handle specific button actions
+        if (value === 'C') {
+            clearDisplay();
+        } else if (value === '=') {
+            calculateResult();
+        } else if (value === 'x') {
+            appendValue('*'); // Convert 'x' to '*'
+        } else if (value === '÷') {
+            appendValue('/'); // Convert '÷' to '/'
+        } else {
+            appendValue(value);
+        }
+    });
+});
